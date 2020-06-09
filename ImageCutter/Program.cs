@@ -1,13 +1,12 @@
-﻿using System;
+﻿using CommandLine;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CommandLine;
-using Microsoft.VisualBasic.CompilerServices;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 
 namespace ImageCutter
 {
