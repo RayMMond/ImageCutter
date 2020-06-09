@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ImageCutter": {
+      "commandName": "Project",
+      "commandLineArgs": "-d C:\\Users\\Raymond\\Desktop\\t -t 423 -b 2011"
+    }
+  }
+}

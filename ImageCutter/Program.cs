@@ -17,10 +17,20 @@ namespace ImageCutter
         public string Directory { get; set; }
 
         // Omitting long name, defaults to name of property, ie "--verbose"
-        [Option(
-            Default = false,
-            HelpText = "Prints all messages to standard output.")]
+        [Option(Default = false, HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
+
+        [Option('l', Required = false, Default = null)]
+        public int? Left { get; set; }
+
+        [Option('r', Required = false, Default = null)]
+        public int? Right { get; set; }
+
+        [Option('t', Required = false, Default = null)]
+        public int? Top { get; set; }
+
+        [Option('b', Required = false, Default = null)]
+        public int? Bottom { get; set; }
     }
 
     class Program
@@ -67,14 +77,23 @@ namespace ImageCutter
                     Log($"Processing {s}.");
                 }
 
-                using var inputStream = File.OpenRead(s);
+                var fileInfo = new FileInfo(s);
+                var newFile = Path.Combine(fileInfo.DirectoryName, "cut_" + fileInfo.Name);
+
+                using var inputStream = File.OpenRead(fileInfo.FullName);
+                using var outputStream = File.OpenWrite(newFile);
 
                 using var image = Image.Load(inputStream, out var format);
 
-                //423 2011
-                image.Mutate(c => c.Crop());
-                image.Save(outputStream, format);
+                var x = options.Left ?? 0;
+                var y = options.Top ?? 0;
 
+                var width = (options.Right ?? image.Width) - x;
+                var height = (options.Bottom ?? image.Height) - y;
+
+                image.Mutate(c =>
+                    c.Crop(new Rectangle(x, y, width, height)));
+                image.Save(outputStream, format);
 
                 if (options.Verbose)
                 {
